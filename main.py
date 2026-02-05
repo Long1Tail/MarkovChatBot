@@ -74,7 +74,7 @@ def send_hello(message: telebot.types.Message):
 
 @bot.message_handler(commands=['g', 'gen', 'generate', 'get_me_some_nonsense'])
 def generate(message: telebot.types.Message):
-    length = random.randint(1, 10)
+    length = 1
     tokens = []
     for i in range(length):
         tokens.append(generate_sentence(beg, mid, end))
@@ -100,7 +100,7 @@ def parse_message(message: telebot.types.Message):
             beg[tokens[0]] = set()
         beg[tokens[0]].add(tokens[1])
 
-        for j in range(1, len(tokens)):
+        for j in range(1, len(tokens) - 1):
             if tokens[j-1] not in mid.keys():
                 mid[tokens[j-1]] = set()
             mid[tokens[j-1]].add(tokens[j])
