@@ -58,15 +58,15 @@ def split_into_sentences(text: str):
 
 def get_rid_of_litter(text: str):
     res = ''
-    for i in text:
-        if i.isalnum() or i == ' ':
-            res += ' '
+    
+    res = text.strip(',:;-_+=@"\'$#%^&*№~`')
+
     while res.find('  ') != -1:
         res = res.replace('  ', ' ')
-    
+
     return res
 
-not_letters = ',:;/\\\"\'[]{}`~!@#$%^&*()-+=№|—'
+
 
 @bot.message_handler(commands=['start'])
 def send_hello(message: telebot.types.Message):
@@ -87,11 +87,12 @@ def parse_message(message: telebot.types.Message):
     if not text:
         return
     
+    
     sentences = split_into_sentences(text)
     for i in sentences:
         if not i:
             continue
-        
+
         tokens = get_rid_of_litter(i).split()
         if len(tokens) < 2:
             continue
@@ -99,6 +100,7 @@ def parse_message(message: telebot.types.Message):
         if tokens[0] not in beg.keys():
             beg[tokens[0]] = set()
         beg[tokens[0]].add(tokens[1])
+        
 
         for j in range(1, len(tokens) - 1):
             if tokens[j-1] not in mid.keys():
@@ -108,6 +110,7 @@ def parse_message(message: telebot.types.Message):
         if tokens[-2] not in end.keys():
             end[tokens[-2]] = set()
         end[tokens[-2]].add(tokens[-1])
+
     write_all_data(beg, mid, end)
 
 
